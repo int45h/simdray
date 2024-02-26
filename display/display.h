@@ -35,10 +35,10 @@ u8 create_app_window(usize w, usize h, const char *p_title, app_window *p_window
     if (p_window == NULL)
     {
         LOG_ERROR("failed to init GLFW");
-        return 0;
+        return SR_ERROR_UNKNOWN;
     }
 
-    return 1;
+    return SR_SUCCESS;
 }
 
 void destroy_app_window(app_window *p_window)
