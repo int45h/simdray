@@ -6,7 +6,10 @@
 #include <errno.h>
 #include <math.h>
 
+#include "common/math/sse/vec4_sse3.h"
 #include "common/math/vec4.h"
+#include "common/math/sray_math.h"
+
 #include "common/typedefs.h"
 #include "display/display.h"
 
@@ -45,10 +48,31 @@ vec4 ray_hit_point(ray r)
 
 void image(u32 *p_color, u32 x, u32 y, u32 w, u32 h)
 {
-    float u = x / (float)w;
-    float v = y / (float)h;
+    float u = (x / (float)w)*2.-1.;
+    float v = (y / (float)h)*2.-1.;
     
-    *p_color = TO_U32_PIXEL(u*255.99f, v*255.99f, 0, 255);
+    float fov = 60.;
+    fov *= M_PI/180.;
+    fov = tan(.5*fov);
+    
+    float ar = (float)y / (float)x;
+
+    vec4 o = new_vec4(0,0,0,0);
+    vec4 d = vec4_normalize(new_vec4(
+        u * fov,
+        v * fov * ar,
+        1,
+        0
+    ));
+    float t = 0;
+
+    vec4 c = vec4_lerp(
+        new_vec4_from_u32(0xcfe3ff00),
+        new_vec4_from_u32(0xb5d4ff00),
+        v
+    );
+    u32 color = u32_from_vec4(c);
+    *p_color = color;
 }
 
 void render_scene(app_state *p_state)

@@ -27,3 +27,4 @@
 
 #define vec4_getc(v,c) vec4_getc_sse3(v,c)
 #define vec4_setc(v,f,c) vec4_setc_sse3(v,f,c)
+#define vec4_lerp(a,b,t) vec4_lerp_sse3(a,b,t)
